@@ -1,4 +1,4 @@
-import { http, HttpResponse, delay } from 'msw'
+ import { http, HttpResponse, delay } from 'msw'
 import type { Product } from '../types/product'
 
 const products: Product[] = [
