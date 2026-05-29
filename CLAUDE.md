@@ -52,3 +52,7 @@ Routes are registered in `main.tsx` using `createBrowserRouter`. Add new routes 
 ### Tailwind
 
 Uses Tailwind v4 with the Vite plugin (`@tailwindcss/vite`). The CSS entry point is a single `@import "tailwindcss"` line — no `tailwind.config.js` needed.
+
+## Checkpoint Notes Convention
+
+Each checkpoint has a notes file at `notes/checkpoint-XX.md`. When working on or explaining any checkpoint, always ensure that file contains a **Key Concepts** section that explains the *why* behind what was implemented — not just what the code does, but the underlying concept (e.g. what staleTime means, why provider order matters, how a pattern works). Use `###` subheadings per concept and include code snippets where helpful.
