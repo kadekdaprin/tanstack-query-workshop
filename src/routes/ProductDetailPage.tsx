@@ -74,6 +74,7 @@ export default function ProductDetailPage() {
             </div>
           </div>
         )}
+
       </main>
     </div>
   )
