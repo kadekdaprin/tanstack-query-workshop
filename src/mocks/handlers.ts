@@ -1,5 +1,6 @@
- import { http, HttpResponse, delay } from 'msw'
+import { http, HttpResponse } from 'msw'
 import type { Product } from '../types/product'
+import { simulateNetwork } from './simulateNetwork'
 
 const products: Product[] = [
   { id: '1', title: 'Wireless Headphones', price: 79.99, category: 'electronics', image: 'https://picsum.photos/seed/headphones/300/300', stock: 15, isWishlisted: false },
@@ -11,14 +12,6 @@ const products: Product[] = [
   { id: '7', title: 'Blender', price: 44.99, category: 'kitchen', image: 'https://picsum.photos/seed/blender/300/300', stock: 7, isWishlisted: false },
   { id: '8', title: 'Dumbbells Set', price: 89.99, category: 'sports', image: 'https://picsum.photos/seed/dumbbells/300/300', stock: 3, isWishlisted: false },
 ]
-
-async function simulateNetwork() {
-  const ms = 500 + Math.random() * 1500
-  await delay(ms)
-  if (Math.random() < 0.1) {
-    throw new Error('Network error')
-  }
-}
 
 export const handlers = [
   http.get('/api/products', async ({ request }) => {
