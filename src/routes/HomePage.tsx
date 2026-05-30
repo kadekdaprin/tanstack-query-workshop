@@ -11,7 +11,7 @@ export default function HomePage() {
   const [searchInput, setSearchInput] = useState('')
   const debouncedSearch = useDebounce(searchInput.trim() || undefined, 300)
 
-  const { data: products, isLoading, isError, error, refetch } = useProducts(selectedCategory, debouncedSearch)
+  const { data: products, isLoading, isFetching, isError, error, refetch } = useProducts(selectedCategory, debouncedSearch)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -81,7 +81,7 @@ export default function HomePage() {
         )}
 
         {products && products.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-opacity duration-200 ${isFetching ? 'opacity-50' : 'opacity-100'}`}>
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

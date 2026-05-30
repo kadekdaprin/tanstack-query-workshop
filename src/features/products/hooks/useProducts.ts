@@ -5,5 +5,6 @@ export function useProducts(category?: string, search?: string) {
   return useQuery({
     queryKey: ['products', category, search],
     queryFn: () => getProducts(category, search),
+    placeholderData: (prev) => prev,
   })
 }
