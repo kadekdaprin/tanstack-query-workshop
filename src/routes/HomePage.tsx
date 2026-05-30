@@ -1,9 +1,13 @@
+import { useState } from 'react'
 import { useProducts } from '../features/products/hooks/useProducts'
 import ProductCard from '../features/products/components/ProductCard'
 import ProductCardSkeleton from '../features/products/components/ProductCardSkeleton'
 
+const CATEGORIES = ['electronics', 'clothing', 'kitchen', 'sports'] as const
+
 export default function HomePage() {
-  const { data: products, isLoading, isError, error, refetch } = useProducts()
+  const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined)
+  const { data: products, isLoading, isError, error, refetch } = useProducts(selectedCategory)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -11,6 +15,32 @@ export default function HomePage() {
         <h1 className="text-2xl font-bold text-gray-800">FakeStore Pro</h1>
       </header>
       <main className="px-6 py-8">
+        <div className="flex gap-2 mb-6 flex-wrap">
+          <button
+            onClick={() => setSelectedCategory(undefined)}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+              selectedCategory === undefined
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+            }`}
+          >
+            All
+          </button>
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-medium capitalize transition-colors ${
+                selectedCategory === cat
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
         {isLoading && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {Array.from({ length: 8 }).map((_, i) => (
