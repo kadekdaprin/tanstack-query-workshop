@@ -1,9 +1,12 @@
 import { useParams, Link } from 'react-router-dom'
 import { useProduct } from '../features/products/hooks/useProduct'
+import { useRelatedProducts } from '../features/products/hooks/useRelatedProducts'
+import ProductCard from '../features/products/components/ProductCard'
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { data: product, isLoading, isError, error, refetch } = useProduct(id!)
+  const { data: related } = useRelatedProducts(product?.category, id)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,6 +74,17 @@ export default function ProductDetailPage() {
                   {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                 </span>
               </div>
+            </div>
+          </div>
+        )}
+
+        {related && related.length > 0 && (
+          <div className="mt-10">
+            <h3 className="text-lg font-semibold text-gray-800 mb-4">Related Products</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {related.map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
             </div>
           </div>
         )}
