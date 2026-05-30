@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './index.css'
 import { worker } from './mocks/browser'
 import HomePage from './routes/HomePage'
+import ProductDetailPage from './routes/ProductDetailPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
+  },
+  {
+    path: '/products/:id',
+    element: <ProductDetailPage />,
   },
 ])
 

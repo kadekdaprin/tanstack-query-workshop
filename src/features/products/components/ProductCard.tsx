@@ -1,12 +1,14 @@
+import { Link } from 'react-router-dom'
 import type { Product } from '../../../types/product'
 
 type Props = {
+  
   product: Product
 }
 
 export default function ProductCard({ product }: Props) {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+    <Link to={`/products/${product.id}`} className="block bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
       <img
         src={product.image}
         alt={product.title}
@@ -26,6 +28,6 @@ export default function ProductCard({ product }: Props) {
           <span className="text-sm text-gray-500">{product.stock} in stock</span>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
