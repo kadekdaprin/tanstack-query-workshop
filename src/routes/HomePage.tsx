@@ -1,17 +1,26 @@
 import { useState } from 'react'
 import { useProducts } from '../features/products/hooks/useProducts'
+import type { SortBy } from '../features/products/hooks/useProducts'
 import { useDebounce } from '../hooks/useDebounce'
 import ProductCard from '../features/products/components/ProductCard'
 import ProductCardSkeleton from '../features/products/components/ProductCardSkeleton'
 
 const CATEGORIES = ['electronics', 'clothing', 'kitchen', 'sports'] as const
 
+const SORT_OPTIONS: { value: SortBy; label: string }[] = [
+  { value: 'default', label: 'Default' },
+  { value: 'price-asc', label: 'Price ↑' },
+  { value: 'price-desc', label: 'Price ↓' },
+  { value: 'name', label: 'Name A–Z' },
+]
+
 export default function HomePage() {
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined)
   const [searchInput, setSearchInput] = useState('')
+  const [sortBy, setSortBy] = useState<SortBy>('default')
   const debouncedSearch = useDebounce(searchInput.trim() || undefined, 300)
 
-  const { data: products, isLoading, isFetching, isError, error, refetch } = useProducts(selectedCategory, debouncedSearch)
+  const { data: products, isLoading, isFetching, isError, error, refetch } = useProducts(selectedCategory, debouncedSearch, sortBy)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -20,13 +29,24 @@ export default function HomePage() {
       </header>
       <main className="px-6 py-8">
         <div className="flex flex-col gap-4 mb-6">
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search products..."
-            className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="flex gap-3 flex-wrap items-center">
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search products..."
+              className="flex-1 min-w-48 max-w-md px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortBy)}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              {SORT_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => setSelectedCategory(undefined)}
