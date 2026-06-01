@@ -45,4 +45,19 @@ export const handlers = [
     }
     return HttpResponse.json(product)
   }),
+
+  http.patch('/api/products/:id/wishlist', async ({ params }) => {
+    try {
+      await simulateNetwork()
+    } catch {
+      return HttpResponse.json({ message: 'Internal server error' }, { status: 500 })
+    }
+
+    const product = products.find(p => p.id === params.id)
+    if (!product) {
+      return HttpResponse.json({ message: 'Product not found' }, { status: 404 })
+    }
+    product.isWishlisted = !product.isWishlisted
+    return HttpResponse.json(product)
+  }),
 ]

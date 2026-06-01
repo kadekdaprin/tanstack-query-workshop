@@ -1,12 +1,14 @@
 import { useParams, Link } from 'react-router-dom'
 import { useProduct } from '../features/products/hooks/useProduct'
 import { useRelatedProducts } from '../features/products/hooks/useRelatedProducts'
+import { useToggleWishlist } from '../features/products/hooks/useToggleWishlist'
 import ProductCard from '../features/products/components/ProductCard'
 
 export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>()
   const { data: product, isLoading, isError, error, refetch } = useProduct(id!)
   const { data: related } = useRelatedProducts(product?.category, id)
+  const { mutate: toggleWishlist, isPending: isTogglingWishlist } = useToggleWishlist()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -62,17 +64,30 @@ export default function ProductDetailPage() {
                 <span className="text-3xl font-bold text-gray-900">
                   ${product.price.toFixed(2)}
                 </span>
-                <span
-                  className={`text-sm font-medium px-3 py-1 rounded-full ${
-                    product.stock > 5
-                      ? 'bg-green-100 text-green-700'
-                      : product.stock > 0
-                      ? 'bg-yellow-100 text-yellow-700'
-                      : 'bg-red-100 text-red-700'
-                  }`}
-                >
-                  {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span
+                    className={`text-sm font-medium px-3 py-1 rounded-full ${
+                      product.stock > 5
+                        ? 'bg-green-100 text-green-700'
+                        : product.stock > 0
+                        ? 'bg-yellow-100 text-yellow-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                  </span>
+                  <button
+                    onClick={() => toggleWishlist(product.id)}
+                    disabled={isTogglingWishlist}
+                    aria-label={product.isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-full border border-gray-300 text-sm font-medium hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  >
+                    <span className={`text-base leading-none ${product.isWishlisted ? 'text-red-500' : 'text-gray-400'}`}>
+                      {product.isWishlisted ? '♥' : '♡'}
+                    </span>
+                    {product.isWishlisted ? 'Wishlisted' : 'Wishlist'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
